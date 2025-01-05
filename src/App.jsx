@@ -1,9 +1,13 @@
-import React , { useEffect, useState } from 'react'
-import './App.css'
+import React, { useEffect, useState } from 'react';
+import './App.css';
+import clickSound from '../public/Sounds/mouse-click-104737.mp3'; 
+import deleteSound from '../public/Sounds/trash-can-101339.mp3';
 
 function App() {
   const [date, setDate] = useState(new Date());
-  let [todo, SetTodo] = useState('')
+  const [todo, setTodo] = useState('');
+  const [time, setTime] = useState('');
+  const [todos, setTodos] = useState([]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -13,37 +17,95 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
+  const playAddSound = () => {
+    const audio = new Audio(clickSound);
+    audio.play();
+  };
+
+  const playDeleteSound = () => {
+    const audio = new Audio(deleteSound);
+    audio.play();
+  };
+
+  const addTask = () => {
+    if (todo.trim() !== '' && time.trim() !== '') {
+      setTodos([...todos, { task: todo, time, completed: false }]);
+      setTodo('');
+      setTime('');
+      playAddSound();
+    }
+  };
+
+  const toggleComplete = (index) => {
+    const updatedTodos = todos.map((item, idx) =>
+      idx === index ? { ...item, completed: !item.completed } : item
+    );
+    setTodos(updatedTodos);
+  };
+
+  const deleteTask = (index) => {
+    const updatedTodos = todos.filter((_, idx) => idx !== index);
+    setTodos(updatedTodos);
+    playDeleteSound();
+  };
+
   return (
-    <div className='maindiv' style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-      <h3 className='mt-5'>Hey, Lets Plan Your Day</h3>
-      <h5 >It's <span className='text-success'>{date.toLocaleDateString()}</span>, So what ToDo</h5>
-      <span className='span-input col-md-6 col-sm-12'>
-        <input className='col-10 border-0 py-2 px-2 text-center mt-5' value={todo} onChange={(e)=>SetTodo(e.target.value)} type="text" style={{borderTopLeftRadius:5,borderBottomLeftRadius:5}} placeholder='Make ToDo'/>
-        <button className='col-2 border-0 mt-5 bg-primary text-white' style={{borderTopRightRadius:5,borderBottomRightRadius:5}}>Add task</button>
-      </span>
+    <div className="app-container">
+      <div className="header">
+        <h1>Plan Your Day</h1>
+        <h3>
+          Today's Date: <span className="highlight">{date.toLocaleDateString()}</span>
+        </h3>
+      </div>
 
-      <br />
-      
-      <div className="container">
-        <div className="row">
-          <div className="col-12 col-md-11 col-lg-12">
-            <div className="p-3 border bg-white text-dark">
+      <div className="input-section">
+        <input
+          value={todo}
+          onChange={(e) => setTodo(e.target.value)}
+          type="text"
+          className="task-input"
+          placeholder="What do you want to do?"
+        />
+        <input
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+          type="time"
+          className="time-input"
+        />
+        <button onClick={addTask} className="add-task-btn bg-primary">
+          Add Task
+        </button>
+      </div>
 
-              <h4 className='text-center'>ToDo</h4>
-              <hr />
-              
-              <span style={{display:'flex'}}>
-                <input type="radio" className='mx-2'/>
-                Helllo
-              </span>
-
+      <div className="task-container">
+        {todos.length > 0 ? (
+          todos.map((item, index) => (
+            <div
+              key={index}
+              className={`task-item ${item.completed ? 'completed' : ''}`}
+            >
+              <div className="task-details">
+                <span className="task-text">{item.task}</span>
+                <span className="task-time">{item.time}</span>
+              </div>
+              <div className="actions">
+                <input
+                  type="checkbox"
+                  checked={item.completed}
+                  onChange={() => toggleComplete(index)}
+                />
+                <button className="delete-btn" onClick={() => deleteTask(index)}>
+                  Delete
+                </button>
+              </div>
             </div>
-            </div>
-          </div>
-        </div>
-
+          ))
+        ) : (
+          <p className="no-tasks">No tasks yet! Add your first task.</p>
+        )}
+      </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
