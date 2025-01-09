@@ -52,7 +52,7 @@ function App() {
   return (
     <div className="app-container">
       <div className="header">
-        <h1>Plan Your Day</h1>
+        <h1 className='text-white'>Plan Your Day</h1>
         <h3>
           Today's Date: <span className="highlight">{date.toLocaleDateString()}</span>
         </h3>
