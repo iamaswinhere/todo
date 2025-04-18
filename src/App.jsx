@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-const clickSound = '/Sounds/mouse-click-104737.mp3';
-const deleteSound = '/Sounds/trash-can-101339.mp3';
+const clickSound = '/public/Sounds/mouse-click-104737.mp3';
+const deleteSound = '/public/Sounds/trash-can-101339.mp3';
 
 function App() {
   const [date, setDate] = useState(new Date());
