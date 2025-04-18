@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
-import clickSound from '../public/Sounds/mouse-click-104737.mp3'; 
-import deleteSound from '../public/Sounds/trash-can-101339.mp3';
+const clickSound = '/Sounds/mouse-click-104737.mp3';
+const deleteSound = '/Sounds/trash-can-101339.mp3';
 
 function App() {
   const [date, setDate] = useState(new Date());
@@ -54,7 +54,7 @@ function App() {
       <div className="header">
         <h1 className='text-white'>Plan Your Day</h1>
         <h3>
-          Today's Date: <span className="highlight">{date.toLocaleDateString()}</span>
+          Today Date: <span className="highlight">{date.toLocaleDateString()}</span>
         </h3>
       </div>
 
